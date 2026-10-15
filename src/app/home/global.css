@@ -1,0 +1,479 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #091426;
+  color: #f1f5ff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.homepage {
+  min-height: 100vh;
+  background: #091426;
+}
+
+.navbar {
+  height: 72px;
+  padding: 0 5%;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  gap: 25px;
+  border-bottom: 1px solid #1c2c45;
+  background: #0b172a;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.logo span {
+  font-size: 27px;
+}
+
+.navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  height: 100%;
+}
+
+.navbar nav a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: #a8b8d4;
+  font-size: 14px;
+  border-bottom: 2px solid transparent;
+}
+
+.navbar nav a:hover,
+.navbar nav a.navAtivo {
+  color: white;
+  border-color: #6475ff;
+}
+
+.navDireita {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notificacao {
+  border: 0;
+  background: transparent;
+  color: #a8b8d4;
+  font-size: 24px;
+}
+
+.nomeUsuario {
+  color: #b9c8e1;
+  font-size: 13px;
+}
+
+.hero {
+  min-height: 340px;
+  padding: 45px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 85% 45%, #283c5d 0%, transparent 43%),
+    linear-gradient(110deg, #0b172a, #111d32 75%, #26354d);
+  border-bottom: 1px solid #20304a;
+}
+
+.heroConteudo {
+  max-width: 490px;
+}
+
+.saudacao {
+  color: #a9bee2;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  font-size: clamp(32px, 4vw, 48px);
+  line-height: 1.13;
+  letter-spacing: -1px;
+  margin: 0;
+}
+
+.hero h1 span {
+  color: #8192ff;
+}
+
+.heroDescricao {
+  max-width: 390px;
+  color: #b2c2dc;
+  line-height: 1.7;
+  margin: 18px 0 24px;
+}
+
+.botaoBuscar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 230px;
+  padding: 15px 24px;
+  border-radius: 9px;
+  background: #4c5df0;
+  color: white;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.botaoBuscar:hover {
+  background: #6372ff;
+}
+
+.botaoBuscar span {
+  font-size: 23px;
+}
+
+.heroDecoracao {
+  width: 290px;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #182941, #101b2d);
+  border: 1px solid #2b3b57;
+  box-shadow: 0 20px 60px #0003;
+}
+
+.heroDecoracao span {
+  font-size: 75px;
+}
+
+.heroDecoracao p {
+  color: #b7baff;
+  text-align: center;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.conteudo {
+  max-width: 1500px;
+  margin: auto;
+  padding: 34px 5% 20px;
+}
+
+.secao {
+  margin-bottom: 42px;
+  scroll-margin-top: 20px;
+}
+
+.secaoTopo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.secaoTopo h2 {
+  font-size: 21px;
+  margin: 0 0 8px;
+}
+
+.secaoTopo p {
+  color: #96a9c7;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.verTodos {
+  color: #8194ff;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.verTodos:hover {
+  color: white;
+}
+
+.livrosEmprestados,
+.livrosLeitura {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.cardEmprestimo,
+.cardLeitura {
+  min-width: 0;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #253650;
+  border-radius: 12px;
+  background: linear-gradient(140deg, #111f34, #0d192c);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.cardEmprestimo:hover,
+.cardLeitura:hover {
+  border-color: #5266a3;
+  transform: translateY(-2px);
+}
+
+.capaEmprestimo,
+.capaLeitura {
+  width: 90px;
+  min-width: 90px;
+  height: 135px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #283f66, #182843);
+  border: 1px solid #3b4d6c;
+  font-size: 42px;
+  box-shadow: 3px 5px 12px #0003;
+}
+
+.detalhesLivro,
+.detalhesLeitura {
+  min-width: 0;
+  flex: 1;
+}
+
+.detalhesLivro h3,
+.detalhesLeitura h3 {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 7px;
+  overflow-wrap: anywhere;
+}
+
+.detalhesLivro p,
+.detalhesLeitura p {
+  color: #9eb0cc;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.dataDevolucao {
+  display: block;
+  color: #aabbd5;
+  font-size: 11px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.badgeAndamento,
+.badgeLeitura,
+.badgePausado {
+  display: inline-block;
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.badgeAndamento,
+.badgeLeitura {
+  color: #68e7bf;
+  background: #16463f;
+}
+
+.badgePausado {
+  color: #b8c6dd;
+  background: #263750;
+}
+
+
+.capitulo {
+  display: block;
+  color: #a5b7d2;
+  font-size: 11px;
+  margin-bottom: 13px;
+}
+
+.rodape {
+  padding: 20px 0;
+  text-align: center;
+  border-top: 1px solid #20304a;
+  color: #9baecb;
+  font-size: 12px;
+}
+
+.rodape span {
+  display: block;
+  margin-top: 12px;
+  font-size: 20px;
+}
+
+.perfilFlutuante {
+  position: fixed;
+  right: 25px;
+  bottom: 24px;
+  z-index: 10;
+}
+
+.avatarUsuario {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: 2px solid #6475a5;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #6478a3, #273752);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  box-shadow: 0 4px 20px #0005;
+}
+
+.online {
+  position: absolute;
+  right: 0;
+  bottom: 1px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #091426;
+  border-radius: 50%;
+  background: #2fdaa0;
+}
+
+.menuPerfil {
+  position: absolute;
+  right: 0;
+  bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 210px;
+  padding: 18px;
+  border: 1px solid #30415e;
+  border-radius: 12px;
+  background: #132139;
+  box-shadow: 0 10px 35px #0005;
+}
+
+.menuPerfil strong {
+  font-size: 15px;
+}
+
+.menuPerfil span {
+  color: #9eb0cc;
+  font-size: 12px;
+}
+
+.menuPerfil a,
+.menuPerfil button {
+  padding: 8px 0;
+  text-align: left;
+  border: 0;
+  color: #dce6fa;
+  background: transparent;
+  font-size: 13px;
+}
+
+.menuPerfil a:hover,
+.menuPerfil button:hover {
+  color: #8194ff;
+}
+
+@media (max-width: 1050px) {
+  .livrosEmprestados,
+  .livrosLeitura {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .heroDecoracao {
+    width: 220px;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    height: auto;
+    min-height: 68px;
+    padding: 15px 18px;
+    flex-wrap: wrap;
+  }
+
+  .navbar nav {
+    order: 3;
+    width: 100%;
+    height: 42px;
+    gap: 22px;
+    overflow-x: auto;
+  }
+
+  .navDireita {
+    margin-left: auto;
+  }
+
+  .nomeUsuario {
+    display: none;
+  }
+
+  .hero {
+    padding: 35px 22px;
+  }
+
+  .heroDecoracao {
+    display: none;
+  }
+
+  .conteudo {
+    padding: 28px 16px;
+  }
+
+  .livrosEmprestados,
+  .livrosLeitura {
+    grid-template-columns: 1fr;
+  }
+
+  .cardEmprestimo,
+  .cardLeitura {
+    padding: 16px;
+  }
+
+  .secaoTopo {
+    align-items: flex-start;
+  }
+
+  .secaoTopo h2 {
+    font-size: 17px;
+  }
+
+  .secaoTopo p {
+    max-width: 270px;
+  }
+
+  .perfilFlutuante {
+    right: 16px;
+    bottom: 16px;
+  }
+}
