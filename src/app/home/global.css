@@ -477,3 +477,37 @@ button {
     bottom: 16px;
   }
 }
+
+.cadastroLivro {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(440px, 92vw);
+  max-height: 90dvh;
+  padding: 24px;
+  border: 1px solid #30415e;
+  border-radius: 12px;
+  background: #132139;
+  color: #f1f5ff;
+}
+
+.cadastroLivro::backdrop { background: #020813bb; }
+.cadastroLivro form, .cadastroLivro label { display: grid; gap: 8px; }
+.cadastroLivro form { gap: 14px; }
+.cadastroLivro h2 { margin: 0; font-size: 22px; }
+.cadastroLivro input, .cadastroLivro textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #526680;
+  background: #0b172a;
+  color: white;
+  font: inherit;
+}
+.cadastroLivro textarea { resize: vertical; }
+.acoesCadastro { display: flex; justify-content: flex-end; gap: 10px; }
+.acoesCadastro button { border: 0; border-radius: 8px; padding: 10px 14px; background: #334561; color: white; }
+.acoesCadastro button:last-child { background: #4c5df0; }
+.acoesCadastro button:disabled { opacity: .55; cursor: default; }
+.capaAdicionada { object-fit: cover; font-size: 12px; }
+.detalhesLivro p, .cardLeitura p { overflow-wrap: anywhere; }
