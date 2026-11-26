@@ -1,10 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
-import { buscarUsuario } from "../lib/usuarios";
+import { useState } from "react";
 import "./global.css";
 
-const emprestimos = [
+type Livro = {
+  id: number;
+  titulo: string;
+  autor: string;
+  capa: string;
+};
+
+type Emprestimo = Livro & {
+  devolucao: string;
+};
+
+const capas = ["📕", "📘", "📗", "📙", "📔", "📒"];
+
+const emprestimosIniciais: Emprestimo[] = [
   {
     id: 1,
     titulo: "Dom Casmurro",
@@ -27,6 +39,17 @@ const emprestimos = [
     devolucao: "17 out. 2026",
   },
 ];
+
+function dataDevolucao() {
+  const data = new Date();
+  data.setDate(data.getDate() + 14);
+
+  return data.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 const leituras = [
   {
@@ -58,57 +81,51 @@ const leituras = [
   },
 ];
 
-type Livro = { id: string; titulo: string; descricao: string; capa: string };
-
-function chaveLivros() {
-  return "clube-do-livro-acervo:" + (buscarUsuario()?.email.toLowerCase() ?? "local");
-}
-
-function carregarLivros(): Livro[] {
-  return JSON.parse(localStorage.getItem(chaveLivros()) ?? "[]");
-}
-
 export default function Home() {
   const [usuarioAberto, setUsuarioAberto] = useState(false);
-  const dialogo = useRef<HTMLDialogElement>(null);
-  const avatar = useRef<HTMLButtonElement>(null);
-  const [livros, setLivros] = useState<Livro[]>([]);
-  const [descricao, setDescricao] = useState("");
-  const [aviso, setAviso] = useState("");
-  const palavras = descricao.trim() ? descricao.trim().split(/\s+/).length : 0;
+  const [titulo, setTitulo] = useState("");
+  const [autor, setAutor] = useState("");
+  const [livrosAdicionados, setLivrosAdicionados] = useState<Livro[]>([]);
+  const [emprestimos, setEmprestimos] =
+    useState<Emprestimo[]>(emprestimosIniciais);
+  const [emprestados, setEmprestados] = useState<number[]>([]);
 
-  useEffect(() => {
-    function atualizar() {
-      try {
-        setLivros(carregarLivros());
-      } catch {
-        setAviso("Não foi possível carregar os livros deste navegador.");
-      }
-    }
-    atualizar();
-    window.addEventListener("storage", atualizar);
-    return () => window.removeEventListener("storage", atualizar);
-  }, []);
-
-  function salvarLivro(evento: FormEvent<HTMLFormElement>) {
+  function adicionarLivro(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
-    const dados = new FormData(evento.currentTarget);
-    const titulo = String(dados.get("titulo")).trim();
-    const capa = String(dados.get("capa")).trim();
-    if (!titulo || !palavras || palavras > 100) return;
-    try {
-      const livro = { id: crypto.randomUUID(), titulo, descricao: descricao.trim(), capa };
-      const atualizados = [livro, ...carregarLivros()];
-      localStorage.setItem(chaveLivros(), JSON.stringify(atualizados));
-      setLivros(atualizados);
-    } catch {
-      setAviso("Não foi possível salvar o livro neste navegador.");
+
+    const tituloLimpo = titulo.trim();
+    const autorLimpo = autor.trim();
+
+    if (!tituloLimpo || !autorLimpo) {
       return;
     }
-    evento.currentTarget.reset();
-    setDescricao("");
-    setAviso("Livro adicionado.");
-    dialogo.current?.close();
+
+    setLivrosAdicionados((atuais) => [
+      ...atuais,
+      {
+        id: Date.now(),
+        titulo: tituloLimpo,
+        autor: autorLimpo,
+        capa: capas[atuais.length % capas.length],
+      },
+    ]);
+    setTitulo("");
+    setAutor("");
+  }
+
+  function emprestar(livro: Livro) {
+    if (emprestados.includes(livro.id)) {
+      return;
+    }
+
+    setEmprestimos((atuais) => [
+      {
+        ...livro,
+        devolucao: dataDevolucao(),
+      },
+      ...atuais,
+    ]);
+    setEmprestados((atuais) => [...atuais, livro.id]);
   }
 
   return (
@@ -158,31 +175,69 @@ export default function Home() {
       </section>
 
       <div className="conteudo">
-        <div role="status">{aviso}</div>
-        {livros.length > 0 && (
-          <section className="secao">
-            <div className="secaoTopo">
-              <div>
-                <h2>📚 Livros adicionados</h2>
-                <p>Livros que você cadastrou no clube.</p>
-              </div>
+        <section className="secao" id="livros-adicionados">
+          <div className="secaoTopo">
+            <div>
+              <h2>Livros adicionados</h2>
+              <p>Cadastre um livro e pegue emprestado quando quiser.</p>
             </div>
-            <div className="livrosEmprestados">
-              {livros.map(livro => (
-                <article key={livro.id} className="cardEmprestimo">
-                  {/* As capas externas são fornecidas pelo leitor. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="capaEmprestimo capaAdicionada" src={livro.capa} alt={`Capa de ${livro.titulo}`} loading="lazy" />
-                  <div className="detalhesLivro">
-                    <h3>{livro.titulo}</h3>
-                    <p>{livro.descricao}</p>
-                    <span className="badgeAndamento">Cadastrado</span>
-                  </div>
-                </article>
-              ))}
+          </div>
+
+          <form className="formularioLivro" onSubmit={adicionarLivro}>
+            <label>
+              Título
+              <input
+                value={titulo}
+                onChange={(evento) => setTitulo(evento.target.value)}
+                placeholder="Nome do livro"
+                required
+              />
+            </label>
+
+            <label>
+              Autor
+              <input
+                value={autor}
+                onChange={(evento) => setAutor(evento.target.value)}
+                placeholder="Nome do autor"
+                required
+              />
+            </label>
+
+            <button type="submit">Adicionar livro</button>
+          </form>
+
+          {livrosAdicionados.length === 0 ? (
+            <p className="listaVazia">Nenhum livro adicionado ainda.</p>
+          ) : (
+            <div className="livrosAdicionados">
+              {livrosAdicionados.map((livro) => {
+                const jaEmprestado = emprestados.includes(livro.id);
+
+                return (
+                  <article className="cardEmprestimo" key={livro.id}>
+                    <div className="capaEmprestimo">{livro.capa}</div>
+
+                    <div className="detalhesLivro">
+                      <h3>{livro.titulo}</h3>
+                      <p>{livro.autor}</p>
+
+                      <button
+                        type="button"
+                        className="botaoEmprestimo"
+                        onClick={() => emprestar(livro)}
+                        disabled={jaEmprestado}
+                      >
+                        {jaEmprestado ? "Emprestado" : "Empréstimo"}
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
-          </section>
-        )}
+          )}
+        </section>
+
         <section className="secao" id="emprestimos">
           <div className="secaoTopo">
             <div>
@@ -262,11 +317,6 @@ export default function Home() {
             <strong>Murilo</strong>
             <span>Leitor</span>
             <a href="/perfil">Meu perfil</a>
-            <button onClick={() => {
-              setUsuarioAberto(false);
-              setAviso("");
-              dialogo.current?.showModal();
-            }}>Adicionar livro</button>
             <a href="/meus-livros">Meus empréstimos</a>
             <button onClick={() => setUsuarioAberto(false)}>Fechar</button>
           </div>
@@ -274,8 +324,6 @@ export default function Home() {
 
         <button
           className="avatarUsuario"
-          ref={avatar}
-          aria-expanded={usuarioAberto}
           onClick={() => setUsuarioAberto(!usuarioAberto)}
           aria-label="Abrir perfil do usuário"
         >
@@ -283,20 +331,6 @@ export default function Home() {
           <span className="online" />
         </button>
       </div>
-      <dialog className="cadastroLivro" ref={dialogo} aria-labelledby="tituloCadastro" onClose={() => avatar.current?.focus()}>
-        <form onSubmit={salvarLivro}>
-          <h2 id="tituloCadastro">Adicionar livro</h2>
-          <label>Nome do livro<input name="titulo" required pattern={".*\\S.*"} /></label>
-          <label>Descrição<textarea required rows={5} value={descricao} onChange={e => setDescricao(e.target.value)} aria-describedby="contadorPalavras" /></label>
-          <small id="contadorPalavras">{palavras} de 100 palavras</small>
-          <label>URL da capa<input type="url" name="capa" required pattern="https?://.+" placeholder="https://exemplo.com/capa.jpg" /></label>
-          {aviso && <p role="alert">{aviso}</p>}
-          <div className="acoesCadastro">
-            <button type="button" onClick={() => dialogo.current?.close()}>Cancelar</button>
-            <button disabled={!palavras || palavras > 100}>Salvar livro</button>
-          </div>
-        </form>
-      </dialog>
     </main>
   );
 }

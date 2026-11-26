@@ -220,6 +220,61 @@ button {
   color: white;
 }
 
+.formularioLivro {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.formularioLivro label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #a8b8d4;
+  font-size: 12px;
+}
+
+.formularioLivro input {
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #253650;
+  border-radius: 9px;
+  background: #0d192c;
+  color: white;
+  font: inherit;
+}
+
+.formularioLivro button,
+.botaoEmprestimo {
+  height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9px;
+  background: #4c5df0;
+  color: white;
+  font-weight: bold;
+}
+
+.formularioLivro button:hover,
+.botaoEmprestimo:hover {
+  background: #6372ff;
+}
+
+.botaoEmprestimo:disabled {
+  background: #263750;
+  color: #9eb0cc;
+  cursor: default;
+}
+
+.listaVazia {
+  margin: 0;
+  color: #96a9c7;
+  font-size: 13px;
+}
+
+.livrosAdicionados,
 .livrosEmprestados,
 .livrosLeitura {
   display: grid;
@@ -404,6 +459,7 @@ button {
 }
 
 @media (max-width: 1050px) {
+  .livrosAdicionados,
   .livrosEmprestados,
   .livrosLeitura {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -450,6 +506,11 @@ button {
     padding: 28px 16px;
   }
 
+  .formularioLivro {
+    grid-template-columns: 1fr;
+  }
+
+  .livrosAdicionados,
   .livrosEmprestados,
   .livrosLeitura {
     grid-template-columns: 1fr;
@@ -477,37 +538,3 @@ button {
     bottom: 16px;
   }
 }
-
-.cadastroLivro {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  width: min(440px, 92vw);
-  max-height: 90dvh;
-  padding: 24px;
-  border: 1px solid #30415e;
-  border-radius: 12px;
-  background: #132139;
-  color: #f1f5ff;
-}
-
-.cadastroLivro::backdrop { background: #020813bb; }
-.cadastroLivro form, .cadastroLivro label { display: grid; gap: 8px; }
-.cadastroLivro form { gap: 14px; }
-.cadastroLivro h2 { margin: 0; font-size: 22px; }
-.cadastroLivro input, .cadastroLivro textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #526680;
-  background: #0b172a;
-  color: white;
-  font: inherit;
-}
-.cadastroLivro textarea { resize: vertical; }
-.acoesCadastro { display: flex; justify-content: flex-end; gap: 10px; }
-.acoesCadastro button { border: 0; border-radius: 8px; padding: 10px 14px; background: #334561; color: white; }
-.acoesCadastro button:last-child { background: #4c5df0; }
-.acoesCadastro button:disabled { opacity: .55; cursor: default; }
-.capaAdicionada { object-fit: cover; font-size: 12px; }
-.detalhesLivro p, .cardLeitura p { overflow-wrap: anywhere; }
